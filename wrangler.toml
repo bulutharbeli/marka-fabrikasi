@@ -1,0 +1,12 @@
+name = "brandforge-free"
+main = "worker/index.js"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Statik site + /api/proxy aynı Worker'dan sunulur
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+[observability]
+enabled = true

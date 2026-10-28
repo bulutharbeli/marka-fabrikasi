@@ -1,0 +1,31 @@
+{
+  "name": "brandforge-free",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@heyputer/puter.js": "^2.6.5",
+    "imagetracerjs": "^1.2.6",
+    "jszip": "^3.10.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.14",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
+    "@vitejs/plugin-react": "^5.0.4",
+    "tailwindcss": "^4.1.14",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.9"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}
