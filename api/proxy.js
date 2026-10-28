@@ -278,15 +278,27 @@ async function viaClassicPollinations(prompt, model, width, height, seed, negati
 
 /* ------------------------------- görsel üretimi ------------------------------- */
 
+/** Seed her zaman tam sayı olmalı (unified API string seed'i reddeder). */
+function normalizeSeed(value) {
+  if (value === undefined || value === null || value === '') return undefined;
+  const n = Math.floor(Number(value));
+  if (!Number.isFinite(n) || n < 0) return undefined;
+  return n % 2147483647;
+}
+
 async function handleImage(params, env) {
   const {
     prompt = '',
     model = '',
     width = 1024,
     height = 1024,
-    seed,
+    seed: rawSeed,
     editDataUrl = null,
   } = params;
+
+  // Pollinations unified API seed'i TAM SAYI olarak ister; string gönderilirse
+  // "JSON body validation failed" (400) döner ve kotalı classic yola düşülür.
+  const seed = normalizeSeed(rawSeed);
 
   if (!prompt) return json(400, { error: 'prompt is required' });
 
@@ -328,7 +340,7 @@ async function handleImage(params, env) {
         status: 200,
         headers: {
           'content-type': result.contentType || 'image/png',
-          'cache-control': 'public, max-age=600',
+          'cache-control': 'no-store, max-age=0',
           'access-control-allow-origin': '*',
           'x-brandforge-backend': safeHeader(result.backend || 'unknown'),
           'x-brandforge-min-gap': String(result.minGap ?? 2),
