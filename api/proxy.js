@@ -209,7 +209,7 @@ async function viaGemini(prompt, model, key, editDataUrl) {
 }
 
 /** 4) Klasik Pollinations (anahtarsız, ücretsiz ama burst limit'li) */
-async function viaClassicPollinations(prompt, model, width, height, seed) {
+async function viaClassicPollinations(prompt, model, width, height, seed, negativePrompt) {
   const params = new URLSearchParams({
     model: model || 'flux',
     width: String(width || 1024),
@@ -220,6 +220,7 @@ async function viaClassicPollinations(prompt, model, width, height, seed) {
   // Klasik uç nokta unified model id'lerini tanımaz -> klasik eşleştirme
   const classicModel = /flux/i.test(model || '') ? 'flux' : 'z-image-turbo';
   params.set('model', classicModel);
+  if (negativePrompt) params.set('negative_prompt', String(negativePrompt).slice(0, 600));
 
   const target = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?${params}`;
 
@@ -304,7 +305,7 @@ async function handleImage(params, env) {
   if (geminiKey) {
     attempts.push(() => viaGemini(prompt, model, geminiKey, editDataUrl));
   }
-  attempts.push(() => viaClassicPollinations(prompt, model, width, height, seed));
+  attempts.push(() => viaClassicPollinations(prompt, model, width, height, seed, params.negative_prompt));
 
   const errors = [];
   let quotaHit = false;
